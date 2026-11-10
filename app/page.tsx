@@ -4,8 +4,9 @@ import { auth, signIn, signOut } from "@/auth";
 import { db } from "@/db";
 import { memberships, organizations } from "@/db/schema";
 import { createOrganization } from "./actions";
+import { Suspense } from "react";
 
-export default async function Home() {
+async function HomeContent() {
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -42,5 +43,12 @@ export default async function Home() {
         <button className="text-sm underline">Sign out</button>
       </form>
     </main>
+  );
+}
+export default function Home() {
+  return (
+    <Suspense fallback={<p className="p-8">Loading...</p>}>
+      <HomeContent />
+    </Suspense>
   );
 }
